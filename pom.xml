@@ -40,7 +40,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
+	
     <!-- ✅ build는 아래쪽 -->
     <build>
         <plugins>

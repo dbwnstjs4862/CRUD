@@ -5,7 +5,7 @@
 </head>
 <body>
     <h2>회원가입</h2>
-    <form action="UserController" method="post">
+    <form action="JoinController" method="post">
         아이디: <input type="text" name="username"><br>
         비밀번호: <input type="password" name="password"><br>
         이름: <input type="text" name="name"><br>

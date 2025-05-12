@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/UserController")
-public class UserController extends HttpServlet {
+@WebServlet("/join/JoinController")
+public class JoinController extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,9 +30,9 @@ public class UserController extends HttpServlet {
 	    boolean result = service.join(user);
 
 	    if (result) {
-	        response.sendRedirect("success.jsp");
+	    	response.sendRedirect(request.getContextPath() + "/join/success.jsp");
 	    } else {
-	        response.sendRedirect("error.jsp");
+	        response.sendRedirect(request.getContextPath() + "/join/error.jsp");
 	    }
 	}
 
