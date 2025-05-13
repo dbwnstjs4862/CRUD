@@ -2,8 +2,8 @@ package User;
 
 public class UserService {
 
-	public boolean join(UserDTO user) {
+	public int join(UserDTO user) {
 		UserDAO dao = new UserDAO();
-		return dao.join(user) == 1;
+		return dao.join(user);
 	}
 }

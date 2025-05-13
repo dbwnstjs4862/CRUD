@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 public class UserDAO {
 
@@ -47,38 +48,56 @@ public class UserDAO {
 
 	public int join(UserDTO user) {
 	    String sql = "INSERT INTO users (username, password, name, age) VALUES (?, ?, ?, ?)";
-	    PreparedStatement pstmt = null;
-
-	    try {
-	        pstmt = conn.prepareStatement(sql);
+	    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 	        pstmt.setString(1, user.getUsername());
 	        pstmt.setString(2, user.getPassword());
 	        pstmt.setString(3, user.getName());
 	        pstmt.setInt(4, user.getAge());
-	        return pstmt.executeUpdate(); // 1이면 성공, 0이면 실패
+	        return pstmt.executeUpdate(); // 1 반환
+	    } catch (SQLIntegrityConstraintViolationException e) {
+	        System.out.println("❌ 중복된 username입니다: " + e.getMessage());
+	        return -1; // username 중복
 	    } catch (SQLException e) {
-	        System.out.println("회원가입 실패: " + e.getMessage());
-	        return 0;
-	    } finally {
-	        try {
-	            if (pstmt != null) pstmt.close();
-	        } catch (SQLException e) {
-	            System.out.println("PreparedStatement 닫기 실패: " + e.getMessage());
-	        }
+	        e.printStackTrace();
+	        return 0; // 기타 오류
 	    }
 	}
 
-	public boolean login(String id, String pw) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, id);
-            pstmt.setString(2, pw);
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+	
 
+	public UserDTO login(String id, String pw) {
+	    String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+	    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        pstmt.setString(1, id);
+	        pstmt.setString(2, pw);
+	        ResultSet rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            UserDTO user = new UserDTO();
+	            user.setUserId(rs.getInt("userid"));         // int PK
+	            user.setUsername(rs.getString("username"));  // 아이디
+	            user.setPassword(rs.getString("password"));  // 비번 (선택)
+	            user.setName(rs.getString("name"));          // 기타 정보
+	            user.setAge(rs.getInt("age"));
+	            return user;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return null; // 로그인 실패 시 null 반환
+	}
+
+	public boolean existsByUsername(String username) {
+	    String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+	    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        pstmt.setString(1, username);
+	        ResultSet rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            return rs.getInt(1) > 0;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
 }
