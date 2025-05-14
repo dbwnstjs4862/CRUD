@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" session="true" %>
+<%@ include file="/common/navbar.jsp" %>
 <%
     String name = (String) session.getAttribute("name");
 %>

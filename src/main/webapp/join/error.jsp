@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ include file="/common/navbar.jsp" %>
 <%
     String reason = request.getParameter("reason");
     String message = "알 수 없는 오류가 발생했습니다.";

@@ -1,6 +1,7 @@
 package Board;
 
 public class BoardDTO {
+	private int boardId;
 	private String title;
 	private String content;
 	private int writerId;
@@ -8,6 +9,14 @@ public class BoardDTO {
 	private String createdAt;
 
 	// getter / setter
+	 public int getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(int boardId) {
+        this.boardId = boardId;
+    }
+	    
 	public String getTitle() {
 		return title;
 	}

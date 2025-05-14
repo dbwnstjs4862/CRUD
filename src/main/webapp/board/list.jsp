@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ include file="/common/navbar.jsp" %>
 <%@ page import="java.util.*, Board.BoardDTO" %>
 <html>
 <head>
@@ -54,13 +55,17 @@
             for (BoardDTO dto : list) {
         %>
         <tr>
-            <td><%= dto.getTitle() %></td>
+            <td>
+   				<a href="<%= request.getContextPath() %>/board/detail?id=<%= dto.getBoardId() %>">
+      				<%= dto.getTitle() %>
+   			 	</a>
+			</td>
             <td><%= dto.getWriterName() %></td>
             <td><%= dto.getCreatedAt() %></td>
         </tr>
         <% } %>
     </table>
 
-    <a class="btn-write" href="<%= request.getContextPath() %>/board/write.jsp">글쓰기</a>
+    <a class="btn-write" href="<%= request.getContextPath() %>/board/write">글쓰기</a>
 </body>
 </html>

@@ -14,14 +14,17 @@ public class LoginController extends HttpServlet {
 
         String id = request.getParameter("username");
         String pw = request.getParameter("password");
+        
+        System.out.println("username = [" + id + "]");
+        System.out.println("password = [" + pw + "]");
 
         UserDAO dao = new UserDAO();
         UserDTO user = dao.login(id, pw); // 한 번만 호출
 
         if (user != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("userid", user.getUserId());      // int (PK)
-            session.setAttribute("username", user.getUsername());  // 실제 로그인 ID
+            session.setAttribute("userid", user.getUserId());
+            session.setAttribute("username", user.getUsername());
             response.sendRedirect(request.getContextPath() + "/login/success.jsp");
         } else {
             response.sendRedirect(request.getContextPath() + "/login/login.jsp?error=1");
